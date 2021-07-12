@@ -35,7 +35,10 @@ const GroceryForm = ({onAddGrocery}) => {
           value={newGroceryName}
           onChange={handleChangeGroceryName}
       />
-      <input type="submit" />
+      <input
+          type="submit"
+          value="Add Grocery"
+      />
     </form>
   )
 }

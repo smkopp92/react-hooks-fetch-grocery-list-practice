@@ -1,9 +1,10 @@
 import React from "react"
 
-const Grocery = ({grocery}) => {
+const Grocery = ({grocery, onGroceryDelete, onUpdateGrocery}) => {
   return (
-    <li style={{"text-decoration": grocery.isBought ? "line-through" : ""}}>
-      {grocery.name}
+    <li>
+      <p style={{textDecoration: grocery.isBought ? "line-through" : ""}} onClick={onUpdateGrocery}>{grocery.name}</p>
+      <button onClick={onGroceryDelete}>Delete Grocery</button>
     </li>
   )
 }
