@@ -4,6 +4,7 @@ import {
   render,
   screen,
   waitForElementToBeRemoved,
+  waitFor
 } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { server } from "./mocks/server";
@@ -29,7 +30,7 @@ test("creates a new grocery when the form is submitted", async () => {
 
 
   // fill out form
-  fireEvent.change(screen.queryByLabelText(/Name/), {
+  fireEvent.change(screen.getByRole('textbox'), {
     target: { value: "lorem grocerium 3" },
   });
 
@@ -61,9 +62,11 @@ test("Updates the grocery when clicked", async () => {
 
   await screen.findByText(/lorem grocerium 2/g);
 
-  fireEvent.click(screen.queryAllByText(/lorem grocerium 2/));
+  fireEvent.click(screen.getByText(/lorem grocerium 2/));
 
   rerender(<App />);
 
-  expect(screen.queryAllByText(/lorem grocerium 2/)).toHaveStyle(`textDecoration: line-through`)
+  await waitFor(() =>
+    expect(screen.getByText(/lorem grocerium 2/)).toHaveStyle(`textDecoration: line-through`)
+  )
 });
