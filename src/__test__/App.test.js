@@ -65,5 +65,5 @@ test("Updates the grocery when clicked", async () => {
 
   rerender(<App />);
 
-  expect(screen.queryAllByText(/lorem grocerium 2/)).toHaveStyle(`text-decoration: line-through`)
+  expect(screen.queryAllByText(/lorem grocerium 2/)).toHaveStyle(`textDecoration: line-through`)
 });
