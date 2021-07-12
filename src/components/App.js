@@ -1,27 +1,54 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import GroceryList from "./GroceryList"
 import GroceryForm from "./GroceryForm"
-import { fakeGroceries } from "../data/fakeGroceries"
 
 const App = () => {
-  const [ groceries, setGroceries ] = useState(fakeGroceries)
+  const [ groceries, setGroceries ] = useState([])
+
+  useEffect(() => {
+    fetch("http://localhost:4000/groceries")
+      .then(resp => resp.json())
+      .then(data => setGroceries(data))
+  }, [])
 
   const handleAddGrocery = (newGrocery) => {
-    setGroceries([...groceries, newGrocery])
+    fetch("http://localhost:4000/groceries", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newGrocery)
+    })
+      .then(resp => resp.json())
+      .then(data => setGroceries([...groceries, data]))
   }
 
   const handleDeleteGrocery = (deletedGrocery) => {
-    setGroceries(groceries.filter(grocery => grocery !== deletedGrocery))
+    fetch(`http://localhost:4000/groceries/${deletedGrocery.id}`, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(() => setGroceries(groceries.filter(grocery => grocery !== deletedGrocery)))
   }
 
   const handleUpdateGrocery = (updatedGrocery) => {
-    setGroceries(groceries.map(grocery => {
-      if (grocery === updatedGrocery) {
-        return {...updatedGrocery, isBought: !updatedGrocery.isBought}
-      } else {
-        return grocery
-      }
+    fetch(`http://localhost:4000/groceries/${updatedGrocery.id}`, {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({...updatedGrocery, isBought: !updatedGrocery.isBought})
     })
+      .then(resp => resp.json())
+      .then(data => setGroceries(groceries.map(grocery => {
+        if (grocery === updatedGrocery) {
+          return data
+        } else {
+          return grocery
+        }
+      }))
   )}
 
   return (
@@ -29,7 +56,7 @@ const App = () => {
       <h1>GroceryList</h1>
       <GroceryList
           groceries={groceries}
-          onGroceryDelete={handleDeleteGrocery}
+          onDeleteGrocery={handleDeleteGrocery}
           onUpdateGrocery={handleUpdateGrocery}
       />
       <GroceryForm onAddGrocery={handleAddGrocery} />

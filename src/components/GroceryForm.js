@@ -11,8 +11,7 @@ const GroceryForm = ({onAddGrocery}) => {
     event.preventDefault()
     const newGrocery = {
       name: newGroceryName,
-      isBought: false,
-      id: Math.floor(Math.random() * 1000000)
+      isBought: false
     }
 
     onAddGrocery(newGrocery)
