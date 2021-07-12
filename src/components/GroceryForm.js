@@ -11,21 +11,12 @@ const GroceryForm = ({onAddGrocery}) => {
     event.preventDefault()
     const newGrocery = {
       name: newGroceryName,
-      isBought: false
+      isBought: false,
+      id: Math.floor(Math.random() * 1000000)
     }
 
-    fetch("http://localhost:4000/groceries", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newGrocery)
-    })
-      .then(resp => resp.json())
-      .then(data => {
-        onAddGrocery(data)
-        setNewGroceryName("")
-      })
+    onAddGrocery(newGrocery)
+    setNewGroceryName("")
   }
 
   return (
